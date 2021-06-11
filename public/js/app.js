@@ -1832,6 +1832,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
 __webpack_require__(/*! ./assets/css/style.css */ "./resources/js/assets/css/style.css");
 
 
@@ -1893,9 +1896,21 @@ __webpack_require__(/*! ./assets/css/style.css */ "./resources/js/assets/css/sty
       });
     },
     petAction: function petAction(type) {
+      var _this3 = this;
+
       this.axios.post('/api/tamagochi/action', {
         action: type
-      }).then(function (response) {});
+      }).then(function (response) {
+        if (response.data.lose) {
+          alert("К сожалению, питомец погиб :(");
+        }
+
+        _this3.setHealth(response.data.tamagochi.health * 10);
+
+        _this3.setHunger(response.data.tamagochi.hunger * 10);
+
+        _this3.setFatigue(response.data.tamagochi.fatigue * 10);
+      });
     }
   })
 });
@@ -2629,120 +2644,130 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm.authorizedState
-    ? _c(
-        "div",
-        { staticClass: "container" },
-        [
-          _c("box", { attrs: { percent: _vm.health, name: "Здоровье" } }),
-          _vm._v(" "),
-          _c("box", { attrs: { percent: _vm.hunger, name: "Голод" } }),
-          _vm._v(" "),
-          _c("box", { attrs: { percent: _vm.fatigue, name: "Усталость" } }),
-          _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "card", staticStyle: { display: "flow-root" } },
-            [
-              _c(
-                "div",
-                {
-                  staticStyle: {
-                    border: "solid 1px",
-                    "border-color": "#00ff22",
-                    "border-radius": "10%",
-                    "max-width": "500px",
-                    "max-height": "100px",
-                    padding: "3px"
-                  }
-                },
-                [
-                  _c("h1", { staticStyle: { color: "white" } }, [
-                    _vm._v(_vm._s(_vm.name))
-                  ])
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "button",
-                {
-                  on: {
-                    click: function($event) {
-                      return _vm.petAction(1)
-                    }
-                  }
-                },
-                [_vm._v("Игра")]
-              ),
-              _vm._v(" "),
-              _c(
-                "button",
-                {
-                  on: {
-                    click: function($event) {
-                      return _vm.petAction(2)
-                    }
-                  }
-                },
-                [_vm._v("Кормление")]
-              ),
-              _vm._v(" "),
-              _c(
-                "button",
-                {
-                  on: {
-                    click: function($event) {
-                      return _vm.petAction(3)
-                    }
-                  }
-                },
-                [_vm._v("Сон")]
-              )
-            ]
-          )
-        ],
-        1
-      )
-    : _c(
-        "div",
-        { staticClass: "container", staticStyle: { display: "grid" } },
-        [
-          _c("h3", { staticStyle: { color: "white" } }, [
-            _vm._v(
-              "К сожалению, вы еще не зарегистрированы, введите имя для Тамагочи"
-            )
-          ]),
-          _vm._v(" "),
-          _c(
-            "div",
-            { staticStyle: { margin: "0 auto", "margin-top": "10px" } },
-            [
-              _c("input", {
-                directives: [
+  return _c("div", [
+    _vm.authorizedState
+      ? _c(
+          "div",
+          { staticClass: "container" },
+          [
+            _c("box", { attrs: { percent: _vm.health, name: "Здоровье" } }),
+            _vm._v(" "),
+            _c("box", { attrs: { percent: _vm.hunger, name: "Голод" } }),
+            _vm._v(" "),
+            _c("box", { attrs: { percent: _vm.fatigue, name: "Усталость" } }),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "card", staticStyle: { display: "flow-root" } },
+              [
+                _c(
+                  "h1",
+                  { staticStyle: { "align-items": "center", color: "white" } },
+                  [_vm._v("Илья Денисов")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
                   {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.tamagochiName,
-                    expression: "tamagochiName"
-                  }
-                ],
-                attrs: { type: "text" },
-                domProps: { value: _vm.tamagochiName },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
+                    staticStyle: {
+                      border: "solid 1px",
+                      "border-color": "#00ff22",
+                      "border-radius": "10%",
+                      "max-width": "500px",
+                      "max-height": "100px",
+                      padding: "3px"
                     }
-                    _vm.tamagochiName = $event.target.value
+                  },
+                  [
+                    _c("h1", { staticStyle: { color: "white" } }, [
+                      _vm._v(_vm._s(_vm.name))
+                    ])
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    on: {
+                      click: function($event) {
+                        return _vm.petAction(1)
+                      }
+                    }
+                  },
+                  [_vm._v("Кормление")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    on: {
+                      click: function($event) {
+                        return _vm.petAction(2)
+                      }
+                    }
+                  },
+                  [_vm._v("Игра")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    on: {
+                      click: function($event) {
+                        return _vm.petAction(3)
+                      }
+                    }
+                  },
+                  [_vm._v("Сон")]
+                )
+              ]
+            )
+          ],
+          1
+        )
+      : _c(
+          "div",
+          { staticClass: "container", staticStyle: { display: "grid" } },
+          [
+            _c("h3", { staticStyle: { color: "white" } }, [
+              _vm._v(
+                "К сожалению, вы еще не зарегистрированы, введите имя для Тамагочи"
+              )
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticStyle: { margin: "0 auto", "margin-top": "10px" } },
+              [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.tamagochiName,
+                      expression: "tamagochiName"
+                    }
+                  ],
+                  attrs: { type: "text" },
+                  domProps: { value: _vm.tamagochiName },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.tamagochiName = $event.target.value
+                    }
                   }
-                }
-              }),
-              _vm._v(" "),
-              _c("button", { on: { click: _vm.startGame } }, [_vm._v("Играть")])
-            ]
-          )
-        ]
-      )
+                }),
+                _vm._v(" "),
+                _c("button", { on: { click: _vm.startGame } }, [
+                  _vm._v("Играть")
+                ])
+              ]
+            )
+          ]
+        )
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -2786,7 +2811,7 @@ var render = function() {
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "num" }, [
-          _c("h2", [_vm._v(_vm._s(_vm.percent)), _c("span", [_vm._v("%")])])
+          _c("h2", [_vm._v(_vm._s(_vm.percent / 10)), _c("span")])
         ])
       ])
     ])

@@ -1,26 +1,29 @@
 <template>
+    <div>
+        <div class="container" v-if="authorizedState">
+            <box :percent="health" :name="'Здоровье'" />
+            <box :percent="hunger" :name="'Голод'" />
+            <box :percent="fatigue" :name="'Усталость'" />
 
-    <div class="container" v-if="authorizedState">
-        <box :percent="health" :name="'Здоровье'" />
-        <box :percent="hunger" :name="'Голод'" />
-        <box :percent="fatigue" :name="'Усталость'" />
-
-        <div class="card" style="display: flow-root">
-            <div style="border: solid 1px; border-color: #00ff22; border-radius: 10%; max-width: 500px; max-height: 100px; padding: 3px;">
-                <h1 style="color: white">{{ name }}</h1>
+            <div class="card" style="display: flow-root">
+                <h1 style="align-items: center; color: white;">Илья Денисов</h1>
+                <div style="border: solid 1px; border-color: #00ff22; border-radius: 10%; max-width: 500px; max-height: 100px; padding: 3px;">
+                    <h1 style="color: white">{{ name }}</h1>
+                </div>
+                <button @click="petAction(1)">Кормление</button>
+                <button @click="petAction(2)">Игра</button>
+                <button @click="petAction(3)">Сон</button>
             </div>
-            <button @click="petAction(1)">Игра</button>
-            <button @click="petAction(2)">Кормление</button>
-            <button @click="petAction(3)">Сон</button>
+        </div>
+        <div class="container" style="display: grid;" v-else>
+            <h3 style="color: white;">К сожалению, вы еще не зарегистрированы, введите имя для Тамагочи</h3>
+            <div style="margin: 0 auto; margin-top: 10px;">
+                <input type="text" v-model="tamagochiName" />
+                <button @click="startGame">Играть</button>
+            </div>
         </div>
     </div>
-    <div class="container" style="display: grid;" v-else>
-        <h3 style="color: white;">К сожалению, вы еще не зарегистрированы, введите имя для Тамагочи</h3>
-        <div style="margin: 0 auto; margin-top: 10px;">
-            <input type="text" v-model="tamagochiName" />
-            <button @click="startGame">Играть</button>
-        </div>
-    </div>
+
 </template>
 
 <script>
@@ -92,7 +95,12 @@ export default {
             this.axios.post('/api/tamagochi/action', {
                 action: type
             }).then(response => {
-                
+                    if (response.data.lose) {
+                        alert("К сожалению, питомец погиб :(");
+                    }
+                    this.setHealth(response.data.tamagochi.health * 10);
+                    this.setHunger(response.data.tamagochi.hunger * 10);
+                    this.setFatigue(response.data.tamagochi.fatigue * 10);
             })
         }
     }

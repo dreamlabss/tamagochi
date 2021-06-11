@@ -17,4 +17,5 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/user/register', \TamagochiRegisterController::class . '@register');
 Route::get('/user/get', \TamagochiRegisterController::class . '@getUser')->middleware('auth:api');
+Route::post('/tamagochi/action', \TamagochiController::class . '@action')->middleware('auth:api');
 

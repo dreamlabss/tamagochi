@@ -8,7 +8,7 @@
                 <circle cx="70" cy="70" r="70" :style="{'strokeDashoffset': 'calc(440 - (440 * '+ percent +') / 100)'}"></circle>
                 </svg>
                     <div class="num">
-                    <h2>{{ percent }}<span>%</span></h2>
+                    <h2>{{ percent / 10 }}<span></span></h2>
                     </div>
             </div>
             </div>
