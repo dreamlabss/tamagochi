@@ -1,11 +1,11 @@
 pipeline {
     agent{
         node {
-            label:'ubuntu'
+            label: 'ubuntu'
         }
     }
     
-    def app
+    
     stages {
         stage('Clonning Git') {
             steps {
@@ -16,7 +16,7 @@ pipeline {
         stage('Build-and-tag') {
             steps {
                 script {
-                    app = docker.build("dreamlabssdock/tamagochi")
+                  def app = docker.build("dreamlabssdock/tamagochi")
                 }
             }
         }
@@ -38,13 +38,13 @@ pipeline {
             }
         }
     
-        stages {
         
-            stage('SAST') {
-                steps {
-                    sh 'echo SAST stage'
-                }
+        
+        stage('SAST') {
+            steps {
+                sh 'echo SAST stage'
             }
         }
+        
     }
 }
