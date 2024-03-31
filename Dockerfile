@@ -9,6 +9,7 @@ ARG GROUP_ID=1000
 ARG USER_ID=1000
 ENV USER_NAME=www-data
 ARG GROUP_NAME=www-data
+ENV COMPOSER_ALLOW_SUPERUSER=1
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     git \
@@ -86,7 +87,8 @@ RUN chown -R ${USER_NAME}:${GROUP_NAME} /var/www && \
   chown -R $USER_NAME:$USER_NAME /etc/nginx/conf.d/ && \
   chown -R ${USER_NAME}:${GROUP_NAME} /tmp && \
   chown -R ${USER_NAME}:${GROUP_NAME} /etc/supervisor/conf.d/ && \
-  chown -R $USER_NAME:$USER_NAME /var/log/supervisor 
+  chown -R $USER_NAME:$USER_NAME /var/log/supervisor
+
 
 EXPOSE 80
 ENTRYPOINT ["entrypoint.sh"]

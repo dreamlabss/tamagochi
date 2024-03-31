@@ -1,0 +1,12 @@
+version: '2'
+services:
+  tamagochi:
+    image: 'dreamlabssdock/tamagochi:latest'
+    environment:
+      - "PORT:80"
+    ports:
+      - "3123:80"
+    volumes:
+      - ./:/var/www/html
+    command: > 
+      /bin/sh -c "composer install && php artisan key:generate"
