@@ -1,7 +1,7 @@
 pipeline {
     agent{
         node {
-            label: 'ubuntu'
+            label 'ubuntu'
         }
     }
     
@@ -27,7 +27,7 @@ pipeline {
                     docker.withRegistry('https://registry.hub.docker.com', 'dockerhub_creds') {
                         app.push('latest')
                     }
-            }
+                }
             }
         }
         
