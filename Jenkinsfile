@@ -1,10 +1,41 @@
 pipeline {
-    agent {
-        label: 'ubuntu'
-        type: 'docker'
+    node ('ubuntu') {
+        def app
+        stages {
+        stage('Clonning Git') {
+            steps {
+                checkout scm
+            }
+        }
+        
+        stage('Build-and-tag') {
+            steps {
+                script {
+                    app = docker.build("dreamlabssdock/tamagochi")
+                }
+            }
+        }
+        
+        stage('Post-to-dockerhub') {
+            steps {
+                script {
+                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub_creds') {
+                        app.push('latest')
+                    }
+                }
+            }
+        }
+        
+        stage('Pulling--image-server') {
+            steps {
+                sh "docker-compose down"
+                sh "docker-compose up -d"
+            }
+        }
+        }
     }
     
-    def app
+    
 
     stages {
         stage('Clonning Git') {
