@@ -1,56 +1,59 @@
 pipeline {
-    node ('ubuntu'){
+    agent {
+        label 'ubuntu'
+    }
+    
     def app
 
-        stages {
+    stages {
 
-            stage('Clonning Git') {
-                steps
-                {
-                // Check scm
-                checkout scm
-                }       
+        stage('Clonning Git') {
+            steps
+            {
+            // Check scm
+            checkout scm
+            }       
+        }
+
+        stage('Build-and-tag'){
+            steps {
+                app = docker.build(dreamlabssdock/tamagochi)
             }
+        }
 
-            stage('Build-and-tag'){
-                steps {
-                    app = docker.build(dreamlabssdock/tamagochi)
+        stage('Post-to-dockerhub'){
+            steps {
+                docker.withRegistry('https://registry.hub.docker.com', 'dockerhub_creds') {
+                    app.push('latest')
                 }
             }
+        }
 
-            stage('Post-to-dockerhub'){
-                steps {
-                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub_creds') {
-                        app.push('latest')
-                    }
-                }
+        stage('Pulling--image-server'){
+            steps {
+                sh "docker-compose down"
+                sh "docker-compose up -d"
             }
+        }
 
-            stage('Pulling--image-server'){
-                steps {
-                    sh "docker-compose down"
-                    sh "docker-compose up -d"
-                }
+        stage('SAST') {
+            steps {
+                sh 'echo SAST stage'
             }
+        }
 
-            stage('SAST') {
-                steps {
-                    sh 'echo SAST stage'
-                }
+
+        stage('Post-to-docker-hub'){
+            steps{
+                sh 'echo pullign image ...'
             }
+        }
 
-
-            stage('Post-to-docker-hub'){
-                steps{
-                    sh 'echo pullign image ...'
-                }
+        stage('DAST') {
+            steps {
+                sh 'echo dast scan for security'
             }
-
-            stage('DAST') {
-                steps {
-                    sh 'echo dast scan for security'
-                }
-            }
+            
         }
     }
 }
