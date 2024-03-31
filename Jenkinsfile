@@ -4,6 +4,10 @@ pipeline {
             label 'ubuntu'
         }
     }
+
+    environment {
+        DOCKER_RESISRTY = 'true'
+    }
     
     stages {
         stage('Clonning Git') {
@@ -13,29 +17,25 @@ pipeline {
         }
         
         stage('Build-and-tag') {
+            when {
+                expression { DOCKER_RESISRTY = 'true' }
+            }
             steps {
                 script {
-                    try {
-                        def app = docker.build("dreamlabssdock/tamagochi")
-                        env.DOCKER_APP = app
-                    } catch (Exception e){
-                        echo "Failed to build Docker img ${e.message}"
-                        error "Docker image build failed"
-                    }
-                  
+                    def app = docker.build("dreamlabssdock/tamagochi")
+                    env.DOCKER_APP = app         
                 }
             }
         }
         
         stage('Post-to-dockerhub') {
+            when {
+                expression { DOCKER_RESISRTY = 'true' }
+            }
             steps {
                 script {
                     docker.withRegistry('https://registry.hub.docker.com', 'dockerhub_creds') {
-                        if(env.DOCKER_APP != null){
-                            env.DOCKER_APP.push('latest')
-                        } else {
-                            error "Docker image is null"
-                        }
+                        env.DOCKER_APP.push('latest')
                     }
                 }
             }
