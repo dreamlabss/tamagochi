@@ -6,7 +6,6 @@ pipeline {
     }
     
     stages {
-        def app
         stage('Clonning Git') {
             steps {
                 checkout scm
@@ -14,9 +13,12 @@ pipeline {
         }
         
         stage('Build-and-tag') {
+            when {
+                environment name: 'DOCKER_REGISTRY', value: 'true'
+            }
             steps {
                 script {
-                  app = docker.build("dreamlabssdock/tamagochi")
+                  def app = docker.build("dreamlabssdock/tamagochi")
                 }
             }
         }
