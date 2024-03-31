@@ -1,42 +1,11 @@
 pipeline {
-    node ('ubuntu') {
-        def app
-        stages {
-        stage('Clonning Git') {
-            steps {
-                checkout scm
-            }
-        }
-        
-        stage('Build-and-tag') {
-            steps {
-                script {
-                    app = docker.build("dreamlabssdock/tamagochi")
-                }
-            }
-        }
-        
-        stage('Post-to-dockerhub') {
-            steps {
-                script {
-                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub_creds') {
-                        app.push('latest')
-                    }
-                }
-            }
-        }
-        
-        stage('Pulling--image-server') {
-            steps {
-                sh "docker-compose down"
-                sh "docker-compose up -d"
-            }
-        }
+    agent{
+        node {
+            label:'ubuntu'
         }
     }
     
-    
-
+    def app
     stages {
         stage('Clonning Git') {
             steps {
@@ -58,7 +27,7 @@ pipeline {
                     docker.withRegistry('https://registry.hub.docker.com', 'dockerhub_creds') {
                         app.push('latest')
                     }
-                }
+            }
             }
         }
         
@@ -68,19 +37,14 @@ pipeline {
                 sh "docker-compose up -d"
             }
         }
+    
+        stages {
         
-        stage('SAST') {
-            steps {
-                sh 'echo SAST stage'
+            stage('SAST') {
+                steps {
+                    sh 'echo SAST stage'
+                }
             }
-        }
-        
-        stage('Post-to-docker-hub') {
-            // Здесь шаги не нужны, так как нет команд для выполнения
-        }
-        
-        stage('DAST') {
-            // Здесь шаги не нужны, так как нет команд для выполнения
         }
     }
 }
