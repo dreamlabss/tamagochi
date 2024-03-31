@@ -5,7 +5,7 @@ pipeline {
         }
     }
     
-    
+    def app
     stages {
         stage('Clonning Git') {
             steps {
@@ -16,7 +16,7 @@ pipeline {
         stage('Build-and-tag') {
             steps {
                 script {
-                  def app = docker.build("dreamlabssdock/tamagochi")
+                  app = docker.build("dreamlabssdock/tamagochi")
                 }
             }
         }
@@ -31,7 +31,7 @@ pipeline {
             }
         }
         
-        stage('Pulling--image-server') {
+        stage('Pulling-image-server') {
             steps {
                 sh "docker-compose down"
                 sh "docker-compose up -d"
