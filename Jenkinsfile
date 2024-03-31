@@ -11,7 +11,7 @@ pipeline {
                 checkout scm
             }       
         }
-        
+
         stage('SAST') {
             steps {
                 sh 'echo SAST stage'
@@ -25,7 +25,9 @@ pipeline {
         }
 
         stage('Post-to-docker-hub'){
-            sh 'echo pullign image ...'
+            steps{
+                sh 'echo pullign image ...'
+            }
         }
 
         stage('DAST') {
