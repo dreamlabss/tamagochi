@@ -5,8 +5,8 @@ pipeline {
         }
     }
     
-    def app
     stages {
+        def app
         stage('Clonning Git') {
             steps {
                 checkout scm
