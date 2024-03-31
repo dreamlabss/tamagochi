@@ -13,9 +13,6 @@ pipeline {
         }
         
         stage('Build-and-tag') {
-            when {
-                environment name: 'DOCKER_REGISTRY', value: 'true'
-            }
             steps {
                 script {
                     try {
