@@ -1,59 +1,55 @@
 pipeline {
     agent {
-        label 'ubuntu'
+        label: 'ubuntu'
+        type: 'docker'
     }
     
     def app
 
     stages {
-
         stage('Clonning Git') {
-            steps
-            {
-            // Check scm
-            checkout scm
-            }       
-        }
-
-        stage('Build-and-tag'){
             steps {
-                app = docker.build(dreamlabssdock/tamagochi)
+                checkout scm
             }
         }
-
-        stage('Post-to-dockerhub'){
+        
+        stage('Build-and-tag') {
             steps {
-                docker.withRegistry('https://registry.hub.docker.com', 'dockerhub_creds') {
-                    app.push('latest')
+                script {
+                    app = docker.build("dreamlabssdock/tamagochi")
                 }
             }
         }
-
-        stage('Pulling--image-server'){
+        
+        stage('Post-to-dockerhub') {
+            steps {
+                script {
+                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub_creds') {
+                        app.push('latest')
+                    }
+                }
+            }
+        }
+        
+        stage('Pulling--image-server') {
             steps {
                 sh "docker-compose down"
                 sh "docker-compose up -d"
             }
         }
-
+        
         stage('SAST') {
             steps {
                 sh 'echo SAST stage'
             }
         }
-
-
-        stage('Post-to-docker-hub'){
-            steps{
-                sh 'echo pullign image ...'
-            }
+        
+        stage('Post-to-docker-hub') {
+            // Здесь шаги не нужны, так как нет команд для выполнения
         }
-
+        
         stage('DAST') {
-            steps {
-                sh 'echo dast scan for security'
-            }
-            
+            // Здесь шаги не нужны, так как нет команд для выполнения
         }
     }
 }
