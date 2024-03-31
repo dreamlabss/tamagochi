@@ -1,17 +1,17 @@
 pipeline {
 
-agent any
+    agent any
 
     stages {
 
         stage('Clonning Git') {
-
             steps
             {
                 // Check scm
                 checkout scm
             }       
         }
+        
         stage('SAST') {
             steps {
                 sh 'echo SAST stage'
