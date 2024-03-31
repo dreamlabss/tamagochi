@@ -28,19 +28,6 @@ pipeline {
             }
         }
         
-        stage('Post-to-dockerhub') {
-            when {
-                expression { DOCKER_RESISRTY = 'true' }
-            }
-            steps {
-                script {
-                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub_creds') {
-                        env.DOCKER_APP.push('latest')
-                    }
-                }
-            }
-        }
-        
         stage('Pulling-image-server') {
             steps {
                 sh "docker-compose down"
