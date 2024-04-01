@@ -15,6 +15,18 @@ pipeline {
                 checkout scm
             }
         }
+
+        stage('SCA') {
+            steps {
+                build 'SCA-SAST-SNYK'
+            }
+        }
+
+        stage('SAST') {
+            steps {
+                build 'SCA-SAST-SONARQUBE'
+            }
+        }
         
         stage('Build-and-tag') {
             when {
@@ -37,9 +49,9 @@ pipeline {
     
         
         
-        stage('SAST') {
+        stage('AST') {
             steps {
-                sh 'echo SAST stage'
+                build 'SECURITY-DAST-Arachini'
             }
         }
         
